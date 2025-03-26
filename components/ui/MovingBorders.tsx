@@ -13,11 +13,12 @@ import { cn } from "@/lib/utils";
 export function Button({
   borderRadius = "1.75rem",
   children,
-  as: Component = "button",
+  as: Component = "a",
   containerClassName,
   borderClassName,
   duration,
   className,
+  href,
   ...otherProps
 }: {
   borderRadius?: string;
@@ -27,17 +28,22 @@ export function Button({
   borderClassName?: string;
   duration?: number;
   className?: string;
+  href?: string;
   [key: string]: any;
 }) {
   return (
     <Component
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       className={cn(
-        // remove h-16 w-40, add  md:col-span-2
-        "bg-transparent relative text-xl p-[1px] overflow-hidden md:col-span-2 md:row-span-1",
+        "bg-transparent relative text-xl p-[1px] overflow-hidden md:col-span-2 md:row-span-1 cursor-pointer hover:opacity-80 transition-opacity",
         containerClassName
       )}
       style={{
         borderRadius: borderRadius,
+        position: "relative",
+        zIndex: 10
       }}
       {...otherProps}
     >
@@ -57,18 +63,46 @@ export function Button({
 
       <div
         className={cn(
-          "relative bg-slate-900/[0.] border border-slate-800 backdrop-blur-xl text-white flex items-center justify-center w-full h-full text-sm antialiased",
+          "relative bg-slate-900/[0.] border border-slate-800 backdrop-blur-xl text-white flex items-center justify-center w-full h-full text-sm antialiased z-[20]",
           className
         )}
         style={{
           borderRadius: `calc(${borderRadius} * 0.96)`,
+          position: "relative",
+          pointerEvents: "auto"
         }}
       >
         {children}
       </div>
-    </Component>
-  );
-}
+      </Component>
+      );
+      }
+      
+      export const ProjectButton = ({
+      role,
+      href,
+      ...props
+      }: {
+      role: string;
+      href: string;
+      [key: string]: any;
+      }) => {
+      const projectLinks = {
+      "engineer intern": "https://abhas-zentry-clone.vercel.app/",
+      "mobile app dev": "https://ai-teacher-steel.vercel.app/",
+      "Freelance dev project": "https://github.com/abhasbali/headshots-starter",
+      "Lead frontend dev": "https://abhas-zentry-clone.vercel.app/"
+      };
+      
+      return (
+      <Button
+      href={projectLinks[role] || href}
+      {...props}
+      >
+      {role}
+      </Button>
+      );
+      };
 
 export const MovingBorder = ({
   children,
