@@ -1,11 +1,12 @@
-import { useState } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import { IoCopyOutline } from "react-icons/io5";
-
-// Also install this npm i --save-dev @types/react-lottie
-import Lottie from "react-lottie";
-
+import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 
+// Dynamically import Lottie with SSR disabled
+const Lottie = dynamic(() => import("react-lottie"), { ssr: false });
 
 import { BackgroundGradientAnimation } from "./GradientBg";
 import GridGlobe from "./GridGlobe";
@@ -56,15 +57,24 @@ export const BentoGridItem = ({
   const rightLists = ["VueJS", "NextJS", "GraphQL"];
 
   const [copied, setCopied] = useState(false);
+  const [animationInstance, setAnimationInstance] = useState(null);
 
   const defaultOptions = {
-    loop: copied,
-    autoplay: copied,
+    loop: true,
+    autoplay: true,
     animationData: animationData,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
+
+  useEffect(() => {
+    return () => {
+      if (animationInstance) {
+        (animationInstance as any).destroy();
+      }
+    };
+  }, [animationInstance]);
 
   const handleCopy = () => {
     const text = "baliaabhas@gmail.com";
@@ -180,7 +190,18 @@ export const BentoGridItem = ({
                   }`}
               >
                 {/* <img src="/confetti.gif" alt="confetti" /> */}
-                <Lottie options={defaultOptions} height={200} width={400} />
+                <Lottie
+                  options={defaultOptions}
+                  height={200}
+                  width={400}
+                  isClickToPauseDisabled={true}
+                  eventListeners={[{
+                    eventName: 'DOMLoaded',
+                    callback: (animItem) => {
+                      setAnimationInstance(animItem);
+                    },
+                  }]}
+                />
               </div>
 
               <MagicButton
