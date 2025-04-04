@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { IoCopyOutline } from "react-icons/io5";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 // Dynamically import Lottie with SSR disabled
@@ -101,23 +102,23 @@ export const BentoGridItem = ({
       <div className={`${id === 6 && "flex justify-center"} h-full`}>
         <div className="w-full h-full absolute">
           {img && (
-            <img
+            <Image
               src={img}
-              alt={img}
-              className={cn(imgClassName, "object-cover object-center ")}
+              alt={img.split('/').pop() || "Image"}
+              fill
+              className={cn(imgClassName, "object-cover object-center")}
             />
           )}
         </div>
         <div
-          className={`absolute right-0 -bottom-5 ${id === 5 && "w-full opacity-80"
-            } `}
+          className={`absolute right-0 -bottom-5 ${id === 5 && "w-full opacity-80"} `}
         >
           {spareImg && (
-            <img
+            <Image
               src={spareImg}
-              alt={spareImg}
-              //   width={220}
-              className="object-cover object-center w-full h-full"
+              alt={spareImg.split('/').pop() || "Image"}
+              fill
+              className="object-cover object-center"
             />
           )}
         </div>
